@@ -137,7 +137,7 @@ public class OnlineCoursesAnalyzer {
                 }
             }
         } else {
-            courses.stream().sorted((e1, e2) -> e2.participants - e1.participants != 0 ? (int) (e2.participants - e1.participants) : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
+            courses.stream().sorted((e1, e2) -> e2.participants - e1.participants != 0 ? (e2.participants - e1.participants) : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
             for (String cd : l) {
                 if (s.add(cd)) {
                     nl.add(cd);
@@ -149,7 +149,21 @@ public class OnlineCoursesAnalyzer {
 
     //5
     public List<String> searchCourses(String courseSubject, double percentAudited, double totalCourseHours) {
-        return null;
+        List<String> l = new ArrayList<>();
+        ArrayList<String> nl = new ArrayList<>();
+        Set<String> s = new HashSet<>();
+        int a;
+        for (Course e : courses)
+            if ((e.subject.toLowerCase().contains(courseSubject.toLowerCase())) && e.percentAudited >= percentAudited && e.totalHours <= totalCourseHours)
+                l.add(e.title);
+        l.stream().sorted(String::compareTo).forEachOrdered(nl::add);
+        l.clear();
+        for (String cd : nl) {
+            if (s.add(cd)) {
+                l.add(cd);
+            }
+        }
+        return l;
     }
 
     //6
