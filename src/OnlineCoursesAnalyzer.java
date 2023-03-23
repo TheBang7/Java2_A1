@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This is just a demo for you, please run it on JDK17 (some statements may be not allowed in lower version).
@@ -80,7 +81,7 @@ public class OnlineCoursesAnalyzer {
             if (strings.length == 0) continue;
             if (strings.length == 1) t = 0;
             for (String s : strings) {
-                s=s.trim();
+                s = s.trim();
                 if (!m.containsKey(s)) {
                     ArrayList<List<String>> a = new ArrayList<List<String>>();
                     m.put(s, a);
@@ -100,8 +101,50 @@ public class OnlineCoursesAnalyzer {
     }
 
     //4
+
+    //    public List<String> getCourses(int topK, String by) {
+//
+//        ArrayList<String> l = new ArrayList<>();
+//        if (Objects.equals(by, "hours")) {
+//            Map<String, Double> m = new HashMap<>();
+//            for (Course c : courses) {
+//                if (!m.containsKey(c.title.trim())) m.put(c.title.trim(), c.totalHours);
+//                else m.put(c.title.trim(), m.get(c.title.trim()) + c.totalHours);
+//            }
+//            m.entrySet().stream().sorted((e1, e2) -> e2.getValue() - e1.getValue() != 0 ? (int) (e2.getValue() - e1.getValue()) : e1.getKey().compareTo(e2.getKey())).forEachOrdered(e -> l.add(e.getKey()));
+//
+//
+//        } else {
+//            Map<String, Integer> m = new HashMap<>();
+//            for (Course c : courses) {
+//                if (!m.containsKey(c.title.trim())) m.put(c.title.trim(), c.participants);
+//                else m.put(c.title.trim(), c.participants + m.get(c.title.trim()));
+//            }
+//            m.entrySet().stream().sorted((e1, e2) -> e2.getValue() - e1.getValue() != 0 ? (int) (e2.getValue() - e1.getValue()) : e1.getKey().compareTo(e2.getKey())).forEachOrdered(e -> l.add(e.getKey()));
+//        }
+//        return l.subList(0, topK);
+//    }
     public List<String> getCourses(int topK, String by) {
-        return null;
+
+        Set<String> s = new HashSet<>();
+        ArrayList<String> l = new ArrayList<>();
+        ArrayList<String> nl = new ArrayList<>();
+        if (Objects.equals(by, "hours")) {
+            courses.stream().sorted((e1, e2) -> e2.totalHours - e1.totalHours != 0 ? (int) (e2.totalHours - e1.totalHours) : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
+            for (String cd : l) {
+                if (s.add(cd)) {
+                    nl.add(cd);
+                }
+            }
+        } else {
+            courses.stream().sorted((e1, e2) -> e2.participants - e1.participants != 0 ? (int) (e2.participants - e1.participants) : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
+            for (String cd : l) {
+                if (s.add(cd)) {
+                    nl.add(cd);
+                }
+            }
+        }
+        return nl.subList(0, topK);
     }
 
     //5
