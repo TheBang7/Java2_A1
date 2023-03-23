@@ -22,16 +22,19 @@ public class OnlineCoursesAnalyzer {
       br.readLine();
       while ((line = br.readLine()) != null) {
         String[] info = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)", -1);
-        Course course = new Course(info[0], info[1], new Date(info[2]), info[3], info[4], info[5],
-            Integer.parseInt(info[6]), Integer.parseInt(info[7]), Integer.parseInt(info[8]),
-            Integer.parseInt(info[9]), Integer.parseInt(info[10]), Double.parseDouble(info[11]),
-            Double.parseDouble(info[12]), Double.parseDouble(info[13]),
-            Double.parseDouble(info[14]),
-            Double.parseDouble(info[15]), Double.parseDouble(info[16]),
-            Double.parseDouble(info[17]),
-            Double.parseDouble(info[18]), Double.parseDouble(info[19]),
-            Double.parseDouble(info[20]),
-            Double.parseDouble(info[21]), Double.parseDouble(info[22]));
+        Course course =
+            new Course(info[0], info[1], new Date(info[2]), info[3], info[4], info[5],
+                Integer.parseInt(info[6]), Integer.parseInt(info[7]),
+                Integer.parseInt(info[8]),
+                Integer.parseInt(info[9]), Integer.parseInt(info[10]),
+                Double.parseDouble(info[11]),
+                Double.parseDouble(info[12]), Double.parseDouble(info[13]),
+                Double.parseDouble(info[14]),
+                Double.parseDouble(info[15]), Double.parseDouble(info[16]),
+                Double.parseDouble(info[17]),
+                Double.parseDouble(info[18]), Double.parseDouble(info[19]),
+                Double.parseDouble(info[20]),
+                Double.parseDouble(info[21]), Double.parseDouble(info[22]));
         courses.add(course);
       }
     } catch (IOException e) {
@@ -114,30 +117,6 @@ public class OnlineCoursesAnalyzer {
 
   }
 
-  //4
-
-  //    public List<String> getCourses(int topK, String by) {
-//
-//        ArrayList<String> l = new ArrayList<>();
-//        if (Objects.equals(by, "hours")) {
-//            Map<String, Double> m = new HashMap<>();
-//            for (Course c : courses) {
-//                if (!m.containsKey(c.title.trim())) m.put(c.title.trim(), c.totalHours);
-//                else m.put(c.title.trim(), m.get(c.title.trim()) + c.totalHours);
-//            }
-//            m.entrySet().stream().sorted((e1, e2) -> e2.getValue() - e1.getValue() != 0 ? (int) (e2.getValue() - e1.getValue()) : e1.getKey().compareTo(e2.getKey())).forEachOrdered(e -> l.add(e.getKey()));
-//
-//
-//        } else {
-//            Map<String, Integer> m = new HashMap<>();
-//            for (Course c : courses) {
-//                if (!m.containsKey(c.title.trim())) m.put(c.title.trim(), c.participants);
-//                else m.put(c.title.trim(), c.participants + m.get(c.title.trim()));
-//            }
-//            m.entrySet().stream().sorted((e1, e2) -> e2.getValue() - e1.getValue() != 0 ? (int) (e2.getValue() - e1.getValue()) : e1.getKey().compareTo(e2.getKey())).forEachOrdered(e -> l.add(e.getKey()));
-//        }
-//        return l.subList(0, topK);
-//    }
   public List<String> getCourses(int topK, String by) {
 
     Set<String> s = new HashSet<>();
@@ -145,7 +124,8 @@ public class OnlineCoursesAnalyzer {
     ArrayList<String> nl = new ArrayList<>();
     if (Objects.equals(by, "hours")) {
       courses.stream().sorted(
-          (e1, e2) -> e2.totalHours - e1.totalHours != 0 ? (int) (e2.totalHours - e1.totalHours)
+          (e1, e2) -> e2.totalHours - e1.totalHours != 0 ?
+              (int) (e2.totalHours - e1.totalHours)
               : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
       for (String cd : l) {
         if (s.add(cd)) {
@@ -154,7 +134,8 @@ public class OnlineCoursesAnalyzer {
       }
     } else {
       courses.stream().sorted(
-          (e1, e2) -> e2.participants - e1.participants != 0 ? (e2.participants - e1.participants)
+          (e1, e2) -> e2.participants - e1.participants != 0 ?
+              (e2.participants - e1.participants)
               : e1.title.compareTo(e2.title)).forEach(e -> l.add(e.title));
       for (String cd : l) {
         if (s.add(cd)) {
