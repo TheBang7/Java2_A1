@@ -168,7 +168,62 @@ public class OnlineCoursesAnalyzer {
 
     //6
     public List<String> recommendCourses(int age, int gender, int isBachelorOrHigher) {
-        return null;
+        HashMap<String, Integer> Id = new HashMap<>();
+        int cnt = 0;
+        ArrayList<tCour> l = new ArrayList<>();
+        for (Course c : courses) {
+            if (!Id.containsKey(c.number.trim())) {
+                Id.put(c.number.trim(), cnt++);
+                l.add(new tCour(c.getNumber(), c.getTitle(), c.getLaunchDate()));
+                l.get(cnt - 1).add(c);
+            } else l.get(Id.get(c.number.trim())).add(c);
+        }
+        for (tCour t : l) {
+            t.score = Math.pow(age - t.sumAge / t.cnt, 2)
+                    + Math.pow(gender * 100 - t.sumMale / t.cnt, 2)
+                    + Math.pow(isBachelorOrHigher * 100 - t.sumDegree / t.cnt, 2);
+        }
+        ArrayList<String> Al = new ArrayList<>();
+        //l.stream().sorted((e1, e2) -> e1.score - e2.score != 0 ? (int) (e1.score - e2.score) : e1.title.compareTo(e2.title)).forEachOrdered(e -> Al.add(e.title));
+        l.sort((e1, e2) -> e1.score - e2.score != 0f ? (e1.score - e2.score < 0 ? -1 : 1) : e1.title.compareTo(e2.title));
+        l.forEach(e -> Al.add(e.title));
+        ArrayList<String> nl = new ArrayList<>();
+        Set<String> s = new HashSet<>();
+        for (String cd : Al) {
+            if (s.add(cd)) {
+                nl.add(cd);
+            }
+        }
+        return nl.subList(0, 10);
+    }
+
+    class tCour {
+        String Id;
+        String title;
+        Date date;
+        double sumAge, sumMale, sumDegree, cnt, score;
+
+
+        public tCour(String id, String title, Date date) {
+            Id = id;
+            this.title = title;
+            this.date = date;
+            sumAge = 0;
+            sumMale = 0;
+            sumDegree = 0;
+            cnt = 0;
+        }
+
+        public void add(Course c) {
+            if (date.compareTo(c.launchDate) < 0) {
+                date = c.getLaunchDate();
+                title = c.getTitle();
+            }
+            sumAge += c.medianAge;
+            sumDegree += c.getPercentDegree();
+            sumMale += c.percentMale;
+            cnt++;
+        }
     }
 
 }
